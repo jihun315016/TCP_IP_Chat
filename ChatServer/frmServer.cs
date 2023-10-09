@@ -1,20 +1,15 @@
-ï»¿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net;
 using System.Net.Sockets;
+using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using ChatLib;
 
 namespace ChatServer
 {
     public partial class frmServer : Form
     {
         private TcpListener _listener;
+
 
         public frmServer()
         {
@@ -24,53 +19,53 @@ namespace ChatServer
         private async void btnListen_Click(object sender, EventArgs e)
         {
             _listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8080);
-            _listener.Start(); // 127.0.0.1:8080ìœ¼ë¡œ ì„œë²„ ì‹¤í–‰
-            Console.WriteLine("ì—°ê²° ì„±ê³µ");
+            _listener.Start(); // 127.0.0.1:8080À¸·Î ¼­¹ö ½ÇÇà
+            Console.WriteLine("¿¬°á ¼º°ø");
 
             while (true)
             {
-                // clientê°€ ìœ„ IPì™€ Portë¡œ ì—°ê²°í•  ë•Œê¹Œì§€ ëŒ€ê¸°
-                // clientê°€ ì ‘ê·¼í•˜ê²Œ ë˜ë©´ ë‹¤ìŒ ì½”ë“œ ì§„í–‰
-                // ì•„ë˜ì™€ ê°™ì´ ë™ê¸°ì ìœ¼ë¡œ ì‘ì—…í•˜ë©´ ë©”ì¸ ìŠ¤ë ˆë“œ blocking
-                // -> ë¹„ë™ê¸° ì²˜ë¦¬ í•„ìš”
+                // client°¡ À§ IP¿Í Port·Î ¿¬°áÇÒ ¶§±îÁö ´ë±â
+                // client°¡ Á¢±ÙÇÏ°Ô µÇ¸é ´ÙÀ½ ÄÚµå ÁøÇà
+                // ¾Æ·¡¿Í °°ÀÌ µ¿±âÀûÀ¸·Î ÀÛ¾÷ÇÏ¸é ¸ŞÀÎ ½º·¹µå blocking
+                // -> ºñµ¿±â Ã³¸® ÇÊ¿ä
                 // TcpClient client = _listener.AcceptTcpClient();
                 TcpClient client = await _listener.AcceptTcpClientAsync();
-                Console.WriteLine("ëˆ„êµ°ê°€ ë“¤ì–´ì˜´");
+                Console.WriteLine("´©±º°¡ µé¾î¿È");
 
-                // await stream.ReadAsync() ë©”ì„œë“œì— ì˜í•´
-                // ì²« ë²ˆì§¸ í´ë¼ì´ì–¸íŠ¸ê°€ ì‘ë‹µì„ í•˜ê¸° ì „ê¹Œì§€ëŠ” ë‘ ë²ˆì§¸ í´ë¼ì´ì–¸íŠ¸ê°€ ì ‘ì†ì„ í•˜ì§€ ëª» í•¨
-                // ë”°ë¼ì„œ í´ë¼ì´ì–¸íŠ¸ì˜ ë°ì´í„°ë¥¼ ìˆ˜ì‹ í•˜ê³  ì „ì†¡í•˜ëŠ” ë¶€ë¶„ì„ ë¹„ë™ê¸°ì ìœ¼ë¡œ ë¹¼ì¤€ë‹¤.
-                // ë¹„ë™ê¸°ë¡œ ì²˜ë¦¬í–ˆê¸° ë•Œë¬¸ì— ê°’ì´ ë“¤ì–´ì˜¤ì§€ ì•Šë”ë¼ë„ ë‹¤ìŒ ì‹¤í–‰ìœ¼ë¡œ ë„˜ì–´ê°€ì„œ ë‹¤ìŒ í´ë¼ë¦¬ì–¸íŠ¸ë¥¼ ëŒ€ê¸°í•  ìˆ˜ ìˆìŒ
+                // await stream.ReadAsync() ¸Ş¼­µå¿¡ ÀÇÇØ
+                // Ã¹ ¹øÂ° Å¬¶óÀÌ¾ğÆ®°¡ ÀÀ´äÀ» ÇÏ±â Àü±îÁö´Â µÎ ¹øÂ° Å¬¶óÀÌ¾ğÆ®°¡ Á¢¼ÓÀ» ÇÏÁö ¸ø ÇÔ
+                // µû¶ó¼­ Å¬¶óÀÌ¾ğÆ®ÀÇ µ¥ÀÌÅÍ¸¦ ¼ö½ÅÇÏ°í Àü¼ÛÇÏ´Â ºÎºĞÀ» ºñµ¿±âÀûÀ¸·Î »©ÁØ´Ù.
+                // ºñµ¿±â·Î Ã³¸®Çß±â ¶§¹®¿¡ °ªÀÌ µé¾î¿ÀÁö ¾Ê´õ¶óµµ ´ÙÀ½ ½ÇÇàÀ¸·Î ³Ñ¾î°¡¼­ ´ÙÀ½ Å¬¶ó¸®¾ğÆ®¸¦ ´ë±âÇÒ ¼ö ÀÖÀ½
 
-                // await ì—†ì´ ë¹„ë™ê¸°ì ìœ¼ë¡œ í˜¸ì¶œ
-                // í´ë¼ì´ì–¸íŠ¸ê°€ ì ‘ì†ì„ í•˜ê²Œ ë˜ë©´ 
+                // await ¾øÀÌ ºñµ¿±âÀûÀ¸·Î È£Ãâ
+                // Å¬¶óÀÌ¾ğÆ®°¡ Á¢¼ÓÀ» ÇÏ°Ô µÇ¸é 
                 _ = HandleClient(client);
             }
         }
 
         private async Task HandleClient(TcpClient client)
         {
-            // ë°˜í™˜ëœ ë„¤íŠ¸ì›Œí¬ ìŠ¤íŠ¸ë¦¼ì„ í†µí•´ì„œ ë°ì´í„°ë¥¼ ì£¼ê³  ë°›ì„ ìˆ˜ ìˆìŒ
+            // ¹İÈ¯µÈ ³×Æ®¿öÅ© ½ºÆ®¸²À» ÅëÇØ¼­ µ¥ÀÌÅÍ¸¦ ÁÖ°í ¹ŞÀ» ¼ö ÀÖÀ½
             NetworkStream stream = client.GetStream();
 
-            // Clientì—ì„œ ì²˜ìŒ ë„˜ì–´ì˜¤ëŠ” messageLengthBufferì˜ í¬ê¸°ëŠ” 4byte
-            byte[] sizeBuffer = new byte[4]; 
+            // Client¿¡¼­ Ã³À½ ³Ñ¾î¿À´Â messageLengthBufferÀÇ Å©±â´Â 4byte
+            byte[] sizeBuffer = new byte[4];
             int read;
 
             // read = await stream.ReadAsync(buffer, 0, buffer.Length)
-            // í´ë¼ì´ì–¸íŠ¸ì—ì„œ ë©”ì‹œì§€ë¥¼ ì£¼ê¸° ì „ê¹Œì§€ ëŒ€ê¸°
-            // bufferì— 0 ~ buffer.lengthê¹Œì§€ ì½ì–´ë“¤ì„
+            // Å¬¶óÀÌ¾ğÆ®¿¡¼­ ¸Ş½ÃÁö¸¦ ÁÖ±â Àü±îÁö ´ë±â
+            // buffer¿¡ 0 ~ buffer.length±îÁö ÀĞ¾îµéÀÓ
 
-            // read ê°’ì´ 0ì´ë©´ ì •ìƒì ì¸ ë°ì´í„°ê°€ ì•„ë‹ˆë¼ê³  íŒë‹¨
-            // readì— ê°’ì„ í• ë‹¹í•˜ê³  ê·¸ ê°’ì´ 0ë³´ë‹¤ í° ë™ì•ˆ ë°˜ë³µ
+            // read °ªÀÌ 0ÀÌ¸é Á¤»óÀûÀÎ µ¥ÀÌÅÍ°¡ ¾Æ´Ï¶ó°í ÆÇ´Ü
+            // read¿¡ °ªÀ» ÇÒ´çÇÏ°í ±× °ªÀÌ 0º¸´Ù Å« µ¿¾È ¹İº¹
             //while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-            while(true)
+            while (true)
             {
                 read = await stream.ReadAsync(sizeBuffer, 0, sizeBuffer.Length);
                 if (read == 0)
                     break;
 
-                // sizeëŠ” ë‹¤ìŒì— ë„˜ì–´ì˜¬ ë©”ì‹œì§€ì˜ í¬ê¸°ê°€ ë  ê²ƒ
+                // size´Â ´ÙÀ½¿¡ ³Ñ¾î¿Ã ¸Ş½ÃÁöÀÇ Å©±â°¡ µÉ °Í
                 int size = BitConverter.ToInt32(sizeBuffer, 0);
 
                 byte[] buffer = new byte[size];
@@ -78,12 +73,17 @@ namespace ChatServer
                 if (read == 0)
                     break;
 
-                Console.WriteLine($"ë¬´ì–¸ê°€ ì½ì—ˆìŒ");
+                Console.WriteLine($"¹«¾ğ°¡ ÀĞ¾úÀ½");
 
-                // ì½ì–´ë“¤ì¸ readë¥¼ í…ìŠ¤íŠ¸ë¡œ ë³€í™˜
+                // ÀĞ¾îµéÀÎ read¸¦ ÅØ½ºÆ®·Î º¯È¯
                 string message = Encoding.UTF8.GetString(buffer, 0, read);
 
-                listBox1.Items.Add(message);
+                var hub = ChatHub.Parse(message);
+                
+                listBox1.Items.Add($"UserId : {hub.UserId}, RoomId : {hub.RoomId}," +
+                                   $"UserName : {hub.UserName}, Message : {hub.Message}"
+                    );
+
                 txtCount.Text = listBox1.Items.Count.ToString();
                 var messageBuffer = Encoding.UTF8.GetBytes($"Server : {message}");
                 stream.Write(messageBuffer, 0, messageBuffer.Length);

@@ -3,14 +3,14 @@
     partial class frmServer
     {
         /// <summary>
-        /// 필수 디자이너 변수입니다.
+        ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// 사용 중인 모든 리소스를 정리합니다.
+        ///  Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,65 +20,66 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form 디자이너에서 생성한 코드
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// 디자이너 지원에 필요한 메서드입니다. 
-        /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnListen = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.txtCount = new System.Windows.Forms.TextBox();
-            this.SuspendLayout();
+            btnListen = new Button();
+            txtCount = new TextBox();
+            listBox1 = new ListBox();
+            SuspendLayout();
             // 
             // btnListen
             // 
-            this.btnListen.Location = new System.Drawing.Point(12, 12);
-            this.btnListen.Name = "btnListen";
-            this.btnListen.Size = new System.Drawing.Size(75, 23);
-            this.btnListen.TabIndex = 0;
-            this.btnListen.Text = "시작";
-            this.btnListen.UseVisualStyleBackColor = true;
-            this.btnListen.Click += new System.EventHandler(this.btnListen_Click);
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(118, 12);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(248, 424);
-            this.listBox1.TabIndex = 1;
+            btnListen.Location = new Point(12, 13);
+            btnListen.Margin = new Padding(3, 4, 3, 4);
+            btnListen.Name = "btnListen";
+            btnListen.Size = new Size(100, 29);
+            btnListen.TabIndex = 1;
+            btnListen.Text = "시작";
+            btnListen.UseVisualStyleBackColor = true;
+            btnListen.Click += btnListen_Click;
             // 
             // txtCount
             // 
-            this.txtCount.Location = new System.Drawing.Point(12, 415);
-            this.txtCount.Name = "txtCount";
-            this.txtCount.Size = new System.Drawing.Size(100, 21);
-            this.txtCount.TabIndex = 2;
+            txtCount.Location = new Point(12, 414);
+            txtCount.Margin = new Padding(3, 4, 3, 4);
+            txtCount.Name = "txtCount";
+            txtCount.Size = new Size(100, 23);
+            txtCount.TabIndex = 3;
             // 
-            // frmServer
+            // listBox1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.txtCount);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.btnListen);
-            this.Name = "frmServer";
-            this.Text = "frmServer";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Location = new Point(118, 13);
+            listBox1.Margin = new Padding(3, 4, 3, 4);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(670, 424);
+            listBox1.TabIndex = 4;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(listBox1);
+            Controls.Add(txtCount);
+            Controls.Add(btnListen);
+            Name = "Form1";
+            Text = "Form1";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
-        private System.Windows.Forms.Button btnListen;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.TextBox txtCount;
+        private Button btnListen;
+        private TextBox txtCount;
+        private ListBox listBox1;
     }
 }
-

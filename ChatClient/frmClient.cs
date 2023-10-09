@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatLib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -51,8 +52,16 @@ namespace ChatClient
             // 스트림을 이용하여 텍스트 전송
             string text = textBox1.Text;
 
+            ChatHub hub = new ChatHub()
+            {
+                UserId = 1,
+                RoomId = 1,
+                UserName = "까불이코더",
+                Message = text,
+            };
+
             // text를 바이트 배열로 넣기
-            var messageBuffer = Encoding.UTF8.GetBytes(text);
+            var messageBuffer = Encoding.UTF8.GetBytes(hub.ToJsonString());
             var messageLengthBuffer = BitConverter.GetBytes(messageBuffer.Length);
 
             // 아래와 같이 한꺼번에 데이터가 몰려오게 되면
@@ -66,15 +75,15 @@ namespace ChatClient
             // >> == 서버에 설정해놓은 크기보다 더 큰 데이터 값이 넘어온 경우
             // 해결 방법 2
             // 전송할 데이터 크기를 미리 보내고, 그 다음 메시지를 전송한다. <- 이 방법 사용할 것
-            for (int i = 0; i < 100; i++) 
-            {
+            //for (int i = 0; i < 100; i++) 
+            //{
                 // 메시지 크기를 먼저 넘기고, 그 다음에 메시지를 넘기는 방식으로 코드를 작성하여
                 // 동적으로 버퍼 크기를 생성하기 때문에 버퍼 크기에 대한 제약을 없애준다.
                 // >> 불필요한 메모리가 낭비되지 않는다.
                 // >> 단점은 두 번 전송하기 때문에 한 번 전송하는 것 보단 서버에 트래픽이 증가한다.
                 stream.Write(messageLengthBuffer, 0, messageLengthBuffer.Length);
                 stream.Write(messageBuffer, 0, messageBuffer.Length);
-            }
+            //}
         }
     }
 }
