@@ -45,6 +45,7 @@
             btnStop.TabIndex = 27;
             btnStop.Text = "중지";
             btnStop.UseVisualStyleBackColor = true;
+            btnStop.Click += btnStop_Click;
             // 
             // btnStart
             // 
@@ -54,6 +55,7 @@
             btnStart.TabIndex = 26;
             btnStart.Text = "시작";
             btnStart.UseVisualStyleBackColor = true;
+            btnStart.Click += btnStart_Click;
             // 
             // lbxMsg
             // 
@@ -106,7 +108,7 @@
             label1.Text = " Server";
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // Form1
+            // frmServer
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -118,7 +120,7 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "Form1";
+            Name = "frmServer";
             Text = "Form1";
             ResumeLayout(false);
             PerformLayout();

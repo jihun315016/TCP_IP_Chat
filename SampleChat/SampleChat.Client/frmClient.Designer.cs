@@ -75,6 +75,7 @@
             btnStop.TabIndex = 41;
             btnStop.Text = "종료";
             btnStop.UseVisualStyleBackColor = true;
+            btnStop.Click += btnStop_Click;
             // 
             // btnConnect
             // 
@@ -84,6 +85,7 @@
             btnConnect.TabIndex = 40;
             btnConnect.Text = "연결";
             btnConnect.UseVisualStyleBackColor = true;
+            btnConnect.Click += btnConnect_Click;
             // 
             // label3
             // 
@@ -130,6 +132,7 @@
             txtMessage.Name = "txtMessage";
             txtMessage.Size = new Size(287, 23);
             txtMessage.TabIndex = 49;
+            txtMessage.KeyDown += txtMessage_KeyDown;
             // 
             // frmClient
             // 
