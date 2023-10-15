@@ -1,4 +1,5 @@
 using ChatLib.Events;
+using ChatLib.Handler;
 using ChatLib.Models;
 using ChatLib.Sockets;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ namespace SampleChat.Server
     public partial class frmServer : Form
     {
         private ChatServer _server;
+        private ClientRoomManager _roomManager;
 
         public frmServer()
         {
@@ -18,6 +20,8 @@ namespace SampleChat.Server
             _server.Connected += Connected;
             _server.Disconnected += Disconnected;
             _server.Received += Received;
+
+            _roomManager = new ClientRoomManager();
         }        
 
         private void btnStart_Click(object sender, EventArgs e)
@@ -40,15 +44,17 @@ namespace SampleChat.Server
         /// <param name="e"></param>
         public void Connected(object? sender, ChatEventArgs e) 
         {
-            // TODO : Room 관련 코드 필요
-
             // State를 Initial에서 Connect로 바꾸어 전달해야하기 때문에
             // 새로운 인스턴스 생성
             var chatInfo = new ChatInfo()
             {
+                RoomId = e.ChatInfo.RoomId,
                 UserName = e.ChatInfo.UserName,
                 State = ChatState.Connect
             };
+
+            _roomManager.Add(e.ClientHandler);
+            _roomManager.SendToMyRoom(chatInfo);
 
             AddClientMessageList(chatInfo);
         }
@@ -64,13 +70,16 @@ namespace SampleChat.Server
         /// <param name="e"></param>
         private void Disconnected(object? sender, ChatEventArgs e)
         {
-            // TODO : Room 관련 코드 필요
 
             var chatInfo = new ChatInfo()
             {
+                RoomId = e.ChatInfo.RoomId,
                 UserName = e.ChatInfo.UserName,
                 State = ChatState.Disconnect
             };
+
+            _roomManager.Remove(e.ClientHandler);
+            _roomManager.SendToMyRoom(chatInfo);
 
             lbxClients.Items.Remove(chatInfo);
             AddClientMessageList(chatInfo);
@@ -78,10 +87,8 @@ namespace SampleChat.Server
 
         private void Received(object? sender, ChatEventArgs e)
         {
-            // _roomManager.SendToMyRoom(e.ChatInfo);
+            _roomManager.SendToMyRoom(e.ChatInfo);
 
-            // 이미 연결된 상태에서 메시지를 주고 받는 상황
-            // >> ChatState == Connect
             AddClientMessageList(e.ChatInfo);
         }
 
@@ -93,8 +100,8 @@ namespace SampleChat.Server
         {
             string message = chatInfo.State switch
             {
-                ChatState.Connect => $"[접속] {chatInfo}", // {chatInfo.UserName}님이 접속하였습니다.
-                ChatState.Disconnect => $"[접속 종료] {chatInfo}", // {chatInfo.UserName}님이 종료하였습니다.
+                ChatState.Connect => $"[접속] {chatInfo}",
+                ChatState.Disconnect => $"[접속 종료] {chatInfo}",
                 _ => $"{chatInfo.UserName} : {chatInfo.Message}"
             };
 

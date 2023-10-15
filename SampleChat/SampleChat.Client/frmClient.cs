@@ -53,8 +53,7 @@ namespace SampleChat.Client
 
         /// <summary>
         /// Disconnected 이벤트 발생 경로
-        /// 
-        /// 
+
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
