@@ -42,7 +42,7 @@ namespace ChatLib.Sockets
                     client = await _listener.AcceptTcpClientAsync();
                     Debug.Print($"[클라이언트 연결] {client.Client.Handle}");
 
-                    // ClientHandler와 ChatServer의 이벤트 동기화
+                    // ClientHandler와 ChatServer의 이벤트 동작 동기화
                     clientHandler = new ClientHandler(client);
                     clientHandler.Connected += Connected;
                     clientHandler.Disconnected += Disconnected;

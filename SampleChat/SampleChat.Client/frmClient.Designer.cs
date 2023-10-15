@@ -69,6 +69,7 @@
             // 
             // btnStop
             // 
+            btnStop.ImageAlign = ContentAlignment.TopRight;
             btnStop.Location = new Point(310, 81);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(70, 23);

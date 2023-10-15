@@ -45,6 +45,7 @@ namespace ChatLib.Sockets
                 clientHandler = new ClientHandler(_client);
 
                 // 연결 성공 시 Connected 이벤트 발생
+                // frmClient.Connected => _clientHandler = e.ClientHandler;
                 Connected?.Invoke(this, new ChatEventArgs(clientHandler, chatInfo));
 
                 clientHandler.Disconnected += ClientHandler_Disconnected;
