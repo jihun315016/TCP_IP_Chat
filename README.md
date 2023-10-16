@@ -1,2 +1,2 @@
-# TCP_IP_Win
+# TCP_IP_Chat
 - C# Winforms TCP/IP 학습  

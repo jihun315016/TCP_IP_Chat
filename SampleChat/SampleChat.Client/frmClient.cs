@@ -29,8 +29,8 @@ namespace SampleChat.Client
             _client.Connected += Connected;
             _client.Disconnected += Disconnected;
             _client.Received += Received;
-            //_client.RunningStateChanged += RunningStateChanged;
-        }
+            _client.RunningStateChanged += RunningStateChanged;
+        }        
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
@@ -87,6 +87,12 @@ namespace SampleChat.Client
                 });
                 txtMessage.Clear();
             }
+        }
+
+        private void RunningStateChanged(bool isRunning)
+        {
+            btnConnect.Enabled = !isRunning;
+            btnStop.Enabled = isRunning;
         }
     }
 }

@@ -1,5 +1,5 @@
 using ChatLib.Events;
-using ChatLib.Handler;
+using ChatLib.Managers;
 using ChatLib.Models;
 using ChatLib.Sockets;
 using System.Diagnostics;
@@ -17,6 +17,10 @@ namespace SampleChat.Server
             InitializeComponent();
 
             _server = new ChatServer(IPAddress.Parse("127.0.0.1"), 8080);
+
+            // 원래 ChatServer 객체의 clientHandler 이벤트를 정의해야 하는데
+            // clientHandler가 StartAsync 메서드의 지역 변수로 등록되어 있어서
+            // _server를 통해 한 다리 건너서 이벤트 전달
             _server.Connected += Connected;
             _server.Disconnected += Disconnected;
             _server.Received += Received;
@@ -34,14 +38,6 @@ namespace SampleChat.Server
             _server.Stop(); 
         }
 
-        /// <summary>
-        /// [Connected 이벤트 발생 경로]
-        /// btnStart_Click
-        /// >> _server.StartAsync 
-        /// >> clientHandler.HandleClientAsync - 데이터를 읽었을 때 첫 연결이라면
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void Connected(object? sender, ChatEventArgs e) 
         {
             // State를 Initial에서 Connect로 바꾸어 전달해야하기 때문에
@@ -59,15 +55,6 @@ namespace SampleChat.Server
             AddClientMessageList(chatInfo);
         }
 
-        /// <summary>
-        /// [Disconnected 이벤트 발생 경로]
-        /// frmClient에서 btnStop을 클릭하면
-        /// _server.StartAsync 
-        /// >> clientHandler.HandleClientAsync 루프 종료
-        /// >> Disconnected 이벤트 발생
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void Disconnected(object? sender, ChatEventArgs e)
         {
 

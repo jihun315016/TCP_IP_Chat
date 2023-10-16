@@ -1,4 +1,5 @@
-﻿using ChatLib.Models;
+﻿using ChatLib.Handler;
+using ChatLib.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatLib.Handler
+namespace ChatLib.Managers
 {
     public class ClientRoomManager
     {
