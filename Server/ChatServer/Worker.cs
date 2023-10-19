@@ -1,4 +1,5 @@
 using ChatLib;
+using ChatServer.Loggings;
 using Microsoft.Extensions.Logging;
 using System.Configuration;
 using System.Net;
@@ -11,16 +12,13 @@ namespace ChatServer
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
-
-        private Logging _log4net;
+        private readonly UnifiedLogger _logger;
         private IConfiguration _configuration;
         private TcpListener _listener;
 
         public Worker(ILogger<Worker> logger, Logging log4net, IConfiguration configuration)
         {
-            _logger = logger;
-            _log4net = log4net;
+            _logger = new UnifiedLogger(logger, log4net);
             _configuration = configuration;
         }
 
@@ -36,7 +34,6 @@ namespace ChatServer
                 address = serverInfo.GetValue<string>("Address");
                 port = serverInfo.GetValue<int>("Port");
 
-
                 stoppingToken.Register(() =>
                 {
                     // 여기에 서비스가 중지될 때 실행할 코드를 넣으세요.
@@ -44,23 +41,20 @@ namespace ChatServer
                 });
 
                 ConnectServer(address, port);
-                _log4net.WriteInfo($"연결 성공");
-                _logger.LogInformation($"연결 성공");
+                _logger.WriteInfo("연결 성공");
 
 
                 while (true)
                 {
                     TcpClient client = await _listener.AcceptTcpClientAsync();
-                    _log4net.WriteInfo("누군가 들어옴");
-                    _logger.LogInformation("누군가 들어옴");
+                    _logger.WriteInfo("누군가 들어옴");
 
                     _ = HandleClient(client);
                 }
             }
             catch (Exception ex)
             {
-                _log4net.WriteError(ex.Message);
-                _logger.LogInformation(ex.Message);
+                _logger.WriteError(ex.Message);
             }
             finally
             {
@@ -76,10 +70,9 @@ namespace ChatServer
 
         public void StopServer()
         {
-            _logger.LogInformation("The service is stopping...");
+            _logger.WriteInfo("서비스 종료 중...");
             _listener.Stop();
-            _log4net.WriteInfo($"연결 종료");
-            Console.WriteLine($"연결 종료 {DateTime.Now}");
+            _logger.WriteInfo("연결 종료");
         }
 
 
@@ -88,7 +81,7 @@ namespace ChatServer
             while (true)
             {
                 TcpClient client = await _listener.AcceptTcpClientAsync();
-                _logger.LogInformation("누군가 들어옴");
+                _logger.WriteInfo("누군가 들어옴");
 
                 _ = HandleClient(client);
             }
@@ -114,7 +107,7 @@ namespace ChatServer
                 if (read == 0)
                     break;
 
-                _logger.LogInformation($"무언가 읽었음");
+                _logger.WriteInfo("무언가 읽었음");
 
 
                 string message = Encoding.UTF8.GetString(buffer, 0, read);
