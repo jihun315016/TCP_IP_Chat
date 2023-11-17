@@ -19,8 +19,7 @@ namespace ChatService.Server
             string address;
             int port;
 
-            _logger = logger;
-            _connector = new Connector(configuration);            
+            _connector = new Connector(configuration, (string msg) => _logger.LogInformation(msg)); 
             _logger.LogInformation($"[연결 준비] {_connector.ConnectionInfo}");
         }
 

@@ -13,8 +13,11 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace ChatService.Server.Services
 {
-    internal class Connector
+
+    public class Connector
     {
+        public Action<string> ShowMessage;
+
         public string Address { get; }
 
         public int Port { get; }
@@ -26,7 +29,7 @@ namespace ChatService.Server.Services
 
         private TcpListener _listener;
 
-        public Connector(IConfiguration configuration)
+        public Connector(IConfiguration configuration, Action<string> showMessage)
         {
             Address = GetAppSettings<string>(configuration, "ServerInfo", "Address");
             Port = GetAppSettings<int>(configuration, "ServerInfo", "Port");
@@ -38,6 +41,8 @@ namespace ChatService.Server.Services
                 Port = 8080;
             
             _listener = new TcpListener(IPAddress.Parse(Address), Port);
+
+            ShowMessage += showMessage;
         }
 
         private T GetAppSettings<T>(IConfiguration configuration, string section, string key)
@@ -65,10 +70,10 @@ namespace ChatService.Server.Services
             }
         }        
 
-        public async void StartAsync()
+        public async Task StartAsync()
         {
             TcpClient client;
-
+            
             try
             {
                 _listener.Start();
@@ -76,8 +81,15 @@ namespace ChatService.Server.Services
                 while (true)
                 {
                     client = await _listener.AcceptTcpClientAsync();
+                    ShowMessage("[클라이언트에서 연결되었음]");
 
+                    // 반한된 네트워크 스트림을 통해서 데이터를 주고 받을 수 있음
+                    NetworkStream stream = client.GetStream();
 
+                    while(true)
+                    {
+
+                    }
                 }
             }
             catch (Exception ex)
