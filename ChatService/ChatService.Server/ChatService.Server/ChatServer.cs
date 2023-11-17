@@ -11,39 +11,43 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
-namespace ChatService.Server.Services
+namespace ChatService.Server
 {
 
-    public class Connector
+    public class ChatServer
     {
         public Action<string> ShowMessage;
 
-        public string Address { get; }
+        private TcpListener _listener;
+        private readonly string _address;
+        private readonly int _port;
 
-        public int Port { get; }
-
-        public string ConnectionInfo 
+        public string ConnectionInfo
         {
-            get  { return $"{Address}:{Port}"; }
+            get { return $"{_address}:{_port}"; }
         }
 
-        private TcpListener _listener;
 
-        public Connector(IConfiguration configuration, Action<string> showMessage)
+        public ChatServer(IConfiguration configuration, Action<string> showMessage)
         {
-            Address = GetAppSettings<string>(configuration, "ServerInfo", "Address");
-            Port = GetAppSettings<int>(configuration, "ServerInfo", "Port");
+            _address = GetAppSettings<string>(configuration, "ServerInfo", "Address");
+            _port = GetAppSettings<int>(configuration, "ServerInfo", "Port");
 
-            if (Address == default(string))            
-                Address = "127.0.0.1";
-            
-            if (Port == default(int))            
-                Port = 8080;
-            
-            _listener = new TcpListener(IPAddress.Parse(Address), Port);
+            if (_address == default)
+            {
+                _address = "127.0.0.1";
+            }
+
+            if (_port == default)
+            {
+                _port = 8080;
+            }
+
+            _listener = new TcpListener(IPAddress.Parse(_address), _port);
 
             ShowMessage += showMessage;
         }
+
 
         private T GetAppSettings<T>(IConfiguration configuration, string section, string key)
         {
@@ -53,10 +57,10 @@ namespace ChatService.Server.Services
             try
             {
                 value = serverInfo.GetValue<T>(key);
-                if (EqualityComparer<T>.Default.Equals(value, default(T)))
+                if (EqualityComparer<T>.Default.Equals(value, default))
                 {
                     // value가 T 타입의 기본값인 경우 처리할 내용
-                    return default(T);
+                    return default;
                 }
                 else
                 {
@@ -66,14 +70,14 @@ namespace ChatService.Server.Services
             }
             catch (Exception ex)
             {
-                return default(T);
+                return default;
             }
-        }        
+        }
 
         public async Task StartAsync()
         {
             TcpClient client;
-            
+
             try
             {
                 _listener.Start();
@@ -86,7 +90,7 @@ namespace ChatService.Server.Services
                     // 반한된 네트워크 스트림을 통해서 데이터를 주고 받을 수 있음
                     NetworkStream stream = client.GetStream();
 
-                    while(true)
+                    while (true)
                     {
 
                     }
@@ -100,6 +104,6 @@ namespace ChatService.Server.Services
 
         public void Stop()
         {
-        }        
+        }
     }
 }

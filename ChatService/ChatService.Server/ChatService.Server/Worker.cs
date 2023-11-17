@@ -1,4 +1,3 @@
-using ChatService.Server.Services;
 using Microsoft.Extensions.Configuration;
 using System.Net;
 using System.Net.Sockets;
@@ -10,7 +9,7 @@ namespace ChatService.Server
         private readonly ILogger<Worker> _logger;
         private TcpListener _listener;
         private IConfiguration _configuration;
-        private Connector _connector;
+        private ChatServer _connector;
 
         public Worker(ILogger<Worker> logger, IConfiguration configuration)
         {
@@ -19,7 +18,7 @@ namespace ChatService.Server
             string address;
             int port;
 
-            _connector = new Connector(configuration, (string msg) => _logger.LogInformation(msg)); 
+            _connector = new ChatServer(configuration, (string msg) => _logger.LogInformation(msg)); 
             _logger.LogInformation($"[연결 준비] {_connector.ConnectionInfo}");
         }
 
