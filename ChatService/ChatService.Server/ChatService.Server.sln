@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatService.Server", "ChatService.Server\ChatService.Server.csproj", "{0C1E87C8-F3D6-4144-9278-A2FA4A791198}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatService.Client", "..\ChatService.Client\ChatService.Client\ChatService.Client.csproj", "{487AF54E-ACD6-45F2-AA1B-426FFADF68D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{0C1E87C8-F3D6-4144-9278-A2FA4A791198}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C1E87C8-F3D6-4144-9278-A2FA4A791198}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C1E87C8-F3D6-4144-9278-A2FA4A791198}.Release|Any CPU.Build.0 = Release|Any CPU
+		{487AF54E-ACD6-45F2-AA1B-426FFADF68D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{487AF54E-ACD6-45F2-AA1B-426FFADF68D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{487AF54E-ACD6-45F2-AA1B-426FFADF68D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{487AF54E-ACD6-45F2-AA1B-426FFADF68D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

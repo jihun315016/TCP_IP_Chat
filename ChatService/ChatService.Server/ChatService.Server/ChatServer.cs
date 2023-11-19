@@ -7,7 +7,9 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
 
@@ -30,8 +32,8 @@ namespace ChatService.Server
 
         public ChatServer(IConfiguration configuration, Action<string> showMessage)
         {
-            _address = GetAppSettings<string>(configuration, "ServerInfo", "Address");
-            _port = GetAppSettings<int>(configuration, "ServerInfo", "Port");
+            _address = Utility.GetAppSettings<string>(configuration, "ServerInfo", "Address");
+            _port = Utility.GetAppSettings<int>(configuration, "ServerInfo", "Port");
 
             if (_address == default)
             {
@@ -47,36 +49,16 @@ namespace ChatService.Server
 
             ShowMessage += showMessage;
         }
-
-
-        private T GetAppSettings<T>(IConfiguration configuration, string section, string key)
-        {
-            IConfigurationSection serverInfo = configuration.GetSection(section);
-            T value;
-
-            try
-            {
-                value = serverInfo.GetValue<T>(key);
-                if (EqualityComparer<T>.Default.Equals(value, default))
-                {
-                    // value가 T 타입의 기본값인 경우 처리할 내용
-                    return default;
-                }
-                else
-                {
-                    // value가 T 타입의 기본값이 아닌 경우 처리할 내용
-                    return value;
-                }
-            }
-            catch (Exception ex)
-            {
-                return default;
-            }
-        }
+        
 
         public async Task StartAsync()
         {
             TcpClient client;
+            byte[] bufferSize = new byte[4];
+            byte[] buffer;
+            int read, size;
+            string message;
+            Data data;
 
             try
             {
@@ -87,18 +69,54 @@ namespace ChatService.Server
                     client = await _listener.AcceptTcpClientAsync();
                     ShowMessage("[클라이언트에서 연결되었음]");
 
-                    // 반한된 네트워크 스트림을 통해서 데이터를 주고 받을 수 있음
-                    NetworkStream stream = client.GetStream();
-
-                    while (true)
-                    {
-
-                    }
+                    
+                    _ = HandleClientAsync(client);
                 }
             }
             catch (Exception ex)
             {
+                ShowMessage("!!!");
+            }
+        }
 
+        private async Task HandleClientAsync(TcpClient client)
+        {
+            byte[] bufferSize = new byte[4];
+            byte[] buffer;
+            int read, size;
+            string message;
+            Data data;
+
+            try
+            {
+                // 반한된 네트워크 스트림을 통해서 데이터를 주고 받을 수 있음
+                NetworkStream stream = client.GetStream();
+
+                while (true)
+                {
+                    read = await stream.ReadAsync(bufferSize, 0, bufferSize.Length);
+                    if (read == 0) break;
+
+                    size = BitConverter.ToInt32(bufferSize, 0);
+                    buffer = new byte[size];
+
+                    read = await stream.ReadAsync(buffer, 0, buffer.Length);
+                    if (read == 0) break;
+
+                    message = Encoding.UTF8.GetString(buffer);
+
+                    ShowMessage("???");
+
+                    //message = Encoding.UTF8.GetString(buffer);
+                    //data = JsonSerializer.Deserialize<Data>(message);
+
+                    //ShowMessage($"[{data.Name}] {data.Message}");
+                }
+            }
+            
+            catch (Exception ex)
+            {
+                ShowMessage("!!!");
             }
         }
 

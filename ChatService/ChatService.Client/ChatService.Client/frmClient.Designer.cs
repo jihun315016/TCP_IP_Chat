@@ -42,16 +42,17 @@
             // 
             // txtMessage
             // 
-            txtMessage.Location = new Point(93, 315);
+            txtMessage.Location = new Point(93, 65);
             txtMessage.Name = "txtMessage";
             txtMessage.Size = new Size(287, 23);
             txtMessage.TabIndex = 59;
+            txtMessage.KeyDown += txtMessage_KeyDown;
             // 
             // lbxMsg
             // 
             lbxMsg.FormattingEnabled = true;
             lbxMsg.ItemHeight = 15;
-            lbxMsg.Location = new Point(12, 65);
+            lbxMsg.Location = new Point(12, 94);
             lbxMsg.Name = "lbxMsg";
             lbxMsg.Size = new Size(368, 244);
             lbxMsg.TabIndex = 58;
@@ -98,7 +99,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("맑은 고딕", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            label3.Location = new Point(12, 317);
+            label3.Location = new Point(12, 67);
             label3.Name = "label3";
             label3.Size = new Size(82, 21);
             label3.TabIndex = 51;
@@ -132,7 +133,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(398, 352);
+            ClientSize = new Size(395, 351);
             Controls.Add(txtPort);
             Controls.Add(txtAddress);
             Controls.Add(label1);
@@ -145,6 +146,7 @@
             Controls.Add(label3);
             Name = "frmClient";
             Text = "frmClient";
+            Load += frmClient_Load;
             ResumeLayout(false);
             PerformLayout();
         }
