@@ -103,14 +103,14 @@ namespace ChatService.Server
                     read = await stream.ReadAsync(buffer, 0, buffer.Length);
                     if (read == 0) break;
 
-                    message = Encoding.UTF8.GetString(buffer);
-
-                    ShowMessage("???");
-
                     //message = Encoding.UTF8.GetString(buffer);
-                    //data = JsonSerializer.Deserialize<Data>(message);
 
-                    //ShowMessage($"[{data.Name}] {data.Message}");
+                    //ShowMessage(message);
+
+                    message = Encoding.UTF8.GetString(buffer);
+                    data = JsonSerializer.Deserialize<Data>(message);
+
+                    ShowMessage($"[{data.Name}] {data.Message}");
                 }
             }
             
